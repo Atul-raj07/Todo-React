@@ -8,13 +8,52 @@ const App = () => {
   const [tasks, settask] = useState('');
 
 
+  const toggleTaskCompletion = (index) => {
+    const updatedTasks = taskList.map((task, i) =>
+      i === index ? { ...task, completed: !task.completed } : task
+    );
+    
+    setTaskList(updatedTasks);
+  };
+
   const submitHandler =(e)=>{
     e.preventDefault()
-    // console.log(tasks.task)
-    setTaskList([...taskList,tasks]);
+    
+    console.log(tasks)
+    const task = {
+      
+        title:tasks,
+        completed:false,
+    }
+
+    setTaskList([...taskList,task]);
     settask('')
-    e.target.reset();
+    // e.target.reset();
   }
+
+  const deleteHandler = (index,task) => {
+    const updatedTasks = [...taskList];
+    console.log("nextthing");
+    
+    // if(!task.completed ){
+    //   confirm("Are you sure you want to delete")
+      
+    // }else if(confirm.value = true){
+    //   console.log("krde");
+      
+    // }
+    // // updatedTasks.splice(index, 1);
+
+    // // setTaskList(updatedTasks);
+    // console.log("mat kar");
+    
+   }
+
+
+
+
+
+  // jsx start
   return (
 
 <div className="flex min-h-screen w-full items-center justify-center bg-gray-100">
@@ -22,7 +61,7 @@ const App = () => {
     {/* Task Summary */}
     <div className="mb-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">Your Tasks</h2>
+        <h2 className="text-2xl font-bold text-gray-800">MY DAY</h2>
         <div className="text-right">
           <p className="text-gray-600">
             Completed: <span className="text-green-500 font-semibold">{taskList.filter((task)=> task.completed).length}</span>
@@ -38,13 +77,10 @@ const App = () => {
     <div className="mb-6">
       <form onSubmit={submitHandler} className="flex">
         <input 
-          onChange={(e) => settask({
-           task:e.target.value,
-           completed:true,
-          })}
+          onChange={(e) => settask(e.target.value)}
           type="text"
           name="task"
-          value={tasks.task}
+          value={tasks}
           placeholder="Add a new task..."
           className="w-full text-black p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
@@ -61,19 +97,21 @@ const App = () => {
       {taskList.map((task,index) =>{
         return(
         // const {tite,completed}=Tasks;
-        <div key={index} 
-        onClick={()=>{
-          task.completed = !task.completed;
-          console.log(task.completed)
-        }} 
-        className="flex justify-between items-center p-3 text-black bg-gray-50 border border-gray-200 rounded-lg">
-        <p className={`${task.completed ? 'bg-red-600' : 'bg-green-400'}text-gray-800 `}>{task.task}</p>
+        <div key={index} className='flex gap-4 items-center justify-between '>
+        <div  
+        onClick={()=>toggleTaskCompletion(index) } 
+        className={`${!task.completed ? ' bg-gray-50' : 'bg-green-200'} flex justify-between min-w-[90%]   items-center p-3 text-black border border-gray-200 rounded-lg`}>
+        <p className= {`${task.completed ? "line-through" : ""} font-semibold capitalize text-gray-800`} >{task}</p>
         <div className="flex space-x-2">
         {task.completed ?  <button className="text-green-500 hover:text-green-600 font-semibold">  <FaCheck /> </button> : null} 
-          <button className="text-red-500 hover:text-red-600 font-semibold">
-            <FaTrash />
-          </button>
+          
         </div>
+      </div>
+
+
+      <button onClick={()=>deleteHandler(index,task)} className="text-red-500  hover:text-red-600 font-semibold">
+  <FaTrash />
+</button>
       </div>
         )
       })}
@@ -86,3 +124,7 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
